@@ -2,7 +2,7 @@ Wheels = Class{
   inherits = Movement,
   function (self, level)
     local m = 4 - level
-    Movement.construct(self, 'Wheels', 125 / m, 30 / m, 15, nil)
+    Movement.construct(self, 'Wheels', 125 / m, 30 / m, 3, nil)
     self.keys = {
       move = {
         up    = 'w',
@@ -15,12 +15,18 @@ Wheels = Class{
         counter = 'a'
       }
     }
-    self.da = 70
+    self.da = 3
     self.magn = 0
   end
 }
 
 function Wheels:updateHook(dt, acc)
+  local md = 1
+  if self.magn < 0 then
+    md = -1
+  end
+  self.magn = math.sqrt(self.lv.x ^ 2 + self.lv.y ^ 2) * md
+
   if self.magn ~= 0 then
     if self.turning == 'clock' then
       self.angle = self.angle - self.da

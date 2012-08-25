@@ -10,6 +10,8 @@ require 'src.entity.Entity'
 require 'src.entity.Movement'
 require 'src.entity.movement.Hover'
 require 'src.entity.movement.Wheels'
+require 'src.entity.movement.Legs'
+require 'src.entity.movement.Treads'
 
 -- Weapon
 require 'src.entity.Weapon'

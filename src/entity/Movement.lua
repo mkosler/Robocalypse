@@ -90,15 +90,15 @@ function Movement:update(dt)
   self:updateHook(dt, acc)
 
   if self.lv.x < 0 then
-    self.lv.x = math.min(self.lv.x + (self.traction * dt), 0)
+    self.lv.x = math.min(self.lv.x + self.traction, 0)
   else
-    self.lv.x = math.max(self.lv.x - (self.traction * dt), 0)
+    self.lv.x = math.max(self.lv.x - self.traction, 0)
   end
 
   if self.lv.y < 0 then
-    self.lv.y = math.min(self.lv.y + (self.traction * dt), 0)
+    self.lv.y = math.min(self.lv.y + self.traction, 0)
   else
-    self.lv.y = math.max(self.lv.y - (self.traction * dt), 0)
+    self.lv.y = math.max(self.lv.y - self.traction, 0)
   end
 end
 
