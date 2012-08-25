@@ -3,10 +3,7 @@ Entity = Class{
     self.name = name
 
     self.x = 0
-    self.vx = 0
-
     self.y = 0
-    self.vy = 0
 
     self.image = image
     self.color = color or {255, 0, 0, 0}
@@ -18,14 +15,21 @@ Entity = Class{
   end
 }
 
-function Entity:input()
-  self.movement:input()
-  self.weapon:input()
+function Entity:keypressed(k, u)
+  self.movement:keypressed(k, u)
+  --self.weapon:keypressed(k, u)
+end
+
+function Entity:keyreleased(k, u)
+  self.movement:keyreleased(k, u)
+  --self.weapon:keyreleased(k, u)
 end
 
 function Entity:update(dt)
-  local v = self.movement:update(dt)
-  self.weapon:update(v)
+  self.movement:update(dt)
+
+  self.x = self.x + (self.movement.lv.x * dt)
+  self.y = self.y + (self.movement.lv.y * dt)
 end
 
 function Entity:draw()
