@@ -51,9 +51,6 @@ function Treads:keyreleased(k, u)
 end
 
 function Treads:updateHook(dt, acc)
-  print('moving:', self.moving)
-  print('turning:', self.turning)
-
   local md = 1
   if self.magn < 0 then
     md = -1

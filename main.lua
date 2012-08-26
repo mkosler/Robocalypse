@@ -2,6 +2,7 @@
 Class = require 'lib.hump.class'
 GameState = require 'lib.hump.gamestate'
 HC = require 'lib.HardonCollider'
+GUI = require 'lib.Quickie'
 
 -- Game imports
 sprites = require 'assets'
@@ -16,6 +17,9 @@ require 'src.entity.movement.Treads'
 
 -- Weapon
 require 'src.entity.Weapon'
+require 'src.entity.weapons.Bolt'
+require 'src.entity.weapons.Ram'
+require 'src.entity.weapons.Sword'
 
 -- Armor
 require 'src.entity.Armor'
@@ -34,5 +38,5 @@ end
 
 function love.load()
   GameState.registerEvents()
-  switchState('play')
+  switchState('setup')
 end

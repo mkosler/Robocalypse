@@ -52,7 +52,7 @@
 local newQuad = love.graphics.newQuad
 
 return {
-  image = love.graphics.newImage('assets/gfx/spritesheet.png')
+  image = love.graphics.newImage('assets/gfx/spritesheet.png'),
   field = {
     newQuad(0, 0, 32, 32, 208, 96),
     newQuad(32, 0, 32, 32, 208, 96),
@@ -100,7 +100,7 @@ return {
     hover = {
       newQuad(128, 0, 8, 16, 208, 96),
       newQuad(136, 0, 8, 16, 208, 96),
-    }.
+    },
   },
   avatars = {
     slug = newQuad(144, 0, 32, 32, 208, 96),

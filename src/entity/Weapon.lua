@@ -6,8 +6,11 @@ Weapon = Class{
   end
 }
 
-function Weapon:input()
+function Weapon:keypressed(k, u)
 end
 
-function Weapon:update(v)
+function Weapon:keyreleased(k, u)
+end
+
+function Weapon:update(dt)
 end
