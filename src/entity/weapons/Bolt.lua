@@ -1,9 +1,10 @@
 Bolt = Class{
   inherits = Weapon,
   function (self, level)
+    self.level = level
     local m = 4 - level
     Weapon.construct(self, 'Bolt', 3 / m, nil)
-    self.image = sprites.weapons.bolt[m]
+    self.quad = sprites.weapons.bolt[level]
     self.start = 2
     self.fire = false
   end

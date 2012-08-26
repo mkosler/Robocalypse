@@ -64,6 +64,7 @@ return {
     newQuad(32, 64, 32, 32, 208, 96),
     newQuad(64, 64, 32, 32, 208, 96),
   },
+  chassis = newQuad(128, 16, 32, 32, 208, 96),
   weapons = {
     ram = {
       newQuad(96, 32, 16, 9, 208, 96),

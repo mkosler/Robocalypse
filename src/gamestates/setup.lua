@@ -1,26 +1,36 @@
 local setup = GameState.new()
 local menu = {}
+local menu_default = {
+  armor = false,
+  weapons = {
+    main = false,
+    ram = false,
+    sword = false,
+    bolt = false,
+  },
+  movement = {
+    main = false,
+    hover = false,
+    legs = false,
+    treads = false,
+    wheels = false,
+  },
+}
+local label = {
+  pos = {10, 400},
+  text = nil
+}
+local failed = false
 
 function setup:init()
 end
 
 function setup:enter(prev)
-  menu = {
-    armor = false,
-    weapons = {
-      main = false,
-      ram = false,
-      sword = false,
-      bolt = false,
-    },
-    movement = {
-      main = false,
-      hover = false,
-      legs = false,
-      wheels = false,
-      treads = false,
-    },
-  }
+  menu = menu_default
+end
+
+function setup:leave()
+  label.text = nil
 end
 
 function setup:update(dt)
@@ -36,11 +46,16 @@ function setup:update(dt)
     GUI.group.push{grow = 'right'}
 
     if GUI.Button{text = 'Rubber'} then
-
+      label.text = 'Weak physical protection\nLightweight\nHigh electrical protection'
+      self:attemptchange(Rubber(), 'armor')
     end
     if GUI.Button{text = 'Plastic'} then
+      label.text = 'Medium physical protection\nAverage weight\nNo electrical protection'
+      self:attemptchange(Plastic(), 'armor')
     end
     if GUI.Button{text = 'Steel'} then
+      label.text = 'High physical protection\nHeavyweight\nEnhances electrical damage'
+      self:attemptchange(Steel(), 'armor')
     end
 
     GUI.group.pop{}
@@ -59,14 +74,20 @@ function setup:update(dt)
     end
 
     if menu.weapons.sword then
+      local default_sword_text = 'Use angular velocity to damage opponents!\n'
+
       -- {{{ Swords }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Dull'} then
-      end
-      if GUI.Button{text = 'Sharp'} then
-      end
-      if GUI.Button{text = 'Diamond'} then
+      local widget_info = {
+        short_name = { 'Dull', 'Sharp', 'Diamond' },
+        description = { 'Low quality', 'High quality', 'Ferocious' },
+      }
+      for i = 1, PLAYER.unlock.weapon.sword do
+        if GUI.Button{text = widget_info.short_name[i]} then
+          label.text = default_sword_text .. widget_info.description[i]
+          self:attemptchange(Sword(i), 'weapon')
+        end
       end
 
       GUI.group.pop{}
@@ -78,14 +99,24 @@ function setup:update(dt)
     end
 
     if menu.weapons.ram then
+      local default_ram_text = 'Use linear velocity to crash into your opponents!\n'
+
       -- {{{ Ram }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Balsa'} then
-      end
-      if GUI.Button{text = 'Oak'} then
-      end
-      if GUI.Button{text = 'Spring'} then
+      local widget_info = {
+        short_name = { 'Balsa', 'Oak', 'Spring' },
+        description = {
+          'Softwood\nDoes minor recoil damage',
+          'Hardwood\nDoes major recoil damage',
+          'Hardwood\nDoes no recoil damage',
+        },
+      }
+      for i = 1, PLAYER.unlock.weapons.ram do
+        if GUI.Button{text = widget_info.short_name[i]} then
+          label.text = default_ram_text .. widget_info.description[i]
+          self:attemptchange(Ram(i), 'weapon')
+        end
       end
 
       GUI.group.pop{}
@@ -97,14 +128,24 @@ function setup:update(dt)
     end
 
     if menu.weapons.bolt then
+      local default_bolt_text = 'Zap your opponents at range! The further away, the better!\n'
+
       -- {{{ Bolt }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Static'} then
-      end
-      if GUI.Button{text = 'Pulse'} then
-      end
-      if GUI.Button{text = 'Stream'} then
+      local widget_info = {
+        short_name = { 'Static', 'Pulse', 'Stream' },
+        description = {
+          'Fires immediately after build-up of charge',
+          'User activated (press SPACE)\nPulse firing',
+          'User activated (press SPACE)\ncontinuous stream',
+        },
+      }
+      for i = 1, PLAYER.unlock.weapons.bolt do
+        if GUI.Button{text = widget_info.short_name[i]} then
+          label.text = default_bolt .. widget_info.description[i]
+          self:attemptchange(Bolt(i), 'weapon')
+        end
       end
 
       GUI.group.pop{}
@@ -128,14 +169,15 @@ function setup:update(dt)
     end
 
     if menu.movement.hover then
+      label.text = 'Omni-directional movement (WASD)\nExtremely slow rotation (Q/E counter-clockwise/clockwise)\nLow traction'
+
       -- {{{ Hover }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Level 1'} then
-      end
-      if GUI.Button{text = 'Level 2'} then
-      end
-      if GUI.Button{text = 'Level 3'} then
+      for i = 1, PLAYER.unlock.movement.hover do
+        if GUI.Button{text = 'Level ' .. i} then
+          self:attemptchange(Hover(i), 'movement')
+        end
       end
 
       GUI.group.pop{}
@@ -147,14 +189,15 @@ function setup:update(dt)
     end
 
     if menu.movement.legs then
+      label.text = 'Similar to wheel steering (W/S acceleration/reverse, A/D turn)\nZero turn radius'
+
       -- {{{ Legs }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Level 1'} then
-      end
-      if GUI.Button{text = 'Level 2'} then
-      end
-      if GUI.Button{text = 'Level 3'} then
+      for i = 1, PLAYER.unlock.movement.legs do
+        if GUI.Button{text = 'Level ' .. i} then
+          self:attemptchange(Legs(i), 'movement')
+        end
       end
 
       GUI.group.pop{}
@@ -166,14 +209,15 @@ function setup:update(dt)
     end
 
     if menu.movement.treads then
+      label.text = 'Tank steering (W/S forward/reverse for left tread, UP/DOWN for right tread)\nSlow linear velocity, but highest angular velocity'
+
       -- {{{ Treads }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Level 1'} then
-      end
-      if GUI.Button{text = 'Level 2'} then
-      end
-      if GUI.Button{text = 'Level 3'} then
+      for i = 1, PLAYER.unlock.movement.treads do
+        if GUI.Button{text = 'Level ' .. i} then
+          self:attemptchange(Treads(i), 'movement')
+        end
       end
 
       GUI.group.pop{}
@@ -185,14 +229,15 @@ function setup:update(dt)
     end
 
     if menu.movement.wheels then
+      label.text = 'Typical car steering (W/S forward/reverse, A/D turn left/turn right)\nHighest linear velocity available'
+
       -- {{{ Wheels }}}
       GUI.group.push{grow = 'down'}
 
-      if GUI.Button{text = 'Level 1'} then
-      end
-      if GUI.Button{text = 'Level 2'} then
-      end
-      if GUI.Button{text = 'Level 3'} then
+      for i = 1, PLAYER.unlock.movement.wheels do
+        if GUI.Button{text = 'Level ' .. i} then
+          self:attemptchange(Wheels(i), 'movement')
+        end
       end
 
       GUI.group.pop{}
@@ -205,6 +250,37 @@ function setup:update(dt)
 
   GUI.group.pop{}
   -- {{{ END Main }}}
+  
+  -- {{{ Options }}}
+  GUI.group.push{pos = {530, 10}, grow = 'left'}
+
+  if GUI.Button{text = 'Quit'} then
+    self:quit()
+  end
+  if GUI.Button{text = 'Start'} then
+    if PLAYER:assemblegraphic() then
+      switchState('play')
+    end
+  end
+  if GUI.Button{text = 'Scrap/Salvage'} then
+  end
+
+  GUI.group.pop{}
+  -- {{{ END Options }}}
+
+  if label.text ~= nil then
+    GUI.Label(label)
+  end
+  if failed then
+    GUI.Label{
+      pos = {love.graphics.getWidth() / 2, love.graphics.getHeight() / 4},
+      text = 'Cannot add gear to occupied slot\nPlease scrap and salvage before changing gear'
+    }
+  end
+end
+
+function setup:attemptchange(new_gear, kind)
+  failed = PLAYER:changegear(new_gear, kind)
 end
 
 function setup:draw()
@@ -216,6 +292,7 @@ function setup:keypressed(k, u)
 end
 
 function setup:quit()
+  print('Quitting...')
 end
 
 return setup

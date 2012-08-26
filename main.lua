@@ -23,6 +23,9 @@ require 'src.entity.weapons.Sword'
 
 -- Armor
 require 'src.entity.Armor'
+require 'src.entity.armor.Plastic'
+require 'src.entity.armor.Rubber'
+require 'src.entity.armor.Steel'
 
 -- Gamestates
 states = {}
@@ -31,6 +34,8 @@ states.finish = require 'src.gamestates.finish'
 states.play =   require 'src.gamestates.play'
 states.setup =  require 'src.gamestates.setup'
 states.title =  require 'src.gamestates.title'
+
+PLAYER = Entity('Player')
 
 function switchState(state, ...)
   GameState.switch(states[state], ...)

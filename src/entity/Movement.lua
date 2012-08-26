@@ -31,6 +31,8 @@ Movement = Class{
         counter = ''
       }
     }
+
+    self.origin_offset = 'middle'
   end
 }
 

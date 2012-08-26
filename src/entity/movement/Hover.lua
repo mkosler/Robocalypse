@@ -1,8 +1,10 @@
 Hover = Class{
   inherits = Movement,
   function (self, level)
+    self.level = level
     local m = 4 - level
     Movement.construct(self, 'Hover', 100 / m, 30 / m, 5, nil)
+    self.quad = sprites.movement.hover[level]
     self.keys = {
       move = {
         up    = 'w',

@@ -1,8 +1,10 @@
 Legs = Class{
   inherits = Movement,
   function (self, level)
+    self.level = level
     local m = 4 - level
     Movement.construct(self, 'Legs', 75 / m, 30 / m, 5, nil)
+    self.quad = sprites.movement.legs[level]
     self.keys = {
       move = {
         up    = 'w',
