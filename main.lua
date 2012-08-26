@@ -4,6 +4,7 @@ GameState = require 'lib.hump.gamestate'
 HC = require 'lib.HardonCollider'
 
 -- Game imports
+sprites = require 'assets'
 require 'src.entity.Entity'
 
 -- Movement
@@ -35,9 +36,3 @@ function love.load()
   GameState.registerEvents()
   switchState('play')
 end
-
---function love.update(dt)
---end
-
---function love.draw()
---end
